@@ -24,7 +24,7 @@ $ yarn build
 In `<rootDir>`
 
 ```bash
-$ yarn start
+$ yarn start-mock
 ```
 
 ## Execute test

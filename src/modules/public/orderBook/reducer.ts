@@ -1,3 +1,4 @@
+import { orderBookSideLimit } from '../../../api';
 import { handleIncrementalUpdate } from '../../../helpers';
 import { DepthActions, OrderBookActions } from './actions';
 import {
@@ -108,7 +109,7 @@ export const incrementDepthReducer = (state = initialIncrementDepth, action: Dep
         return {
           ...state,
           sequence: action.payload.sequence,
-          asks: handleIncrementalUpdate(state.asks, action.payload.asks, 'asks'),
+          asks: handleIncrementalUpdate(state.asks, action.payload.asks, 'asks').slice(0, orderBookSideLimit()),
         };
       }
 
@@ -116,7 +117,7 @@ export const incrementDepthReducer = (state = initialIncrementDepth, action: Dep
         return {
           ...state,
           sequence: action.payload.sequence,
-          bids: handleIncrementalUpdate(state.bids, action.payload.bids, 'bids'),
+          bids: handleIncrementalUpdate(state.bids, action.payload.bids, 'bids').slice(0, orderBookSideLimit()),
         };
       }
 

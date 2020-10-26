@@ -12,11 +12,11 @@ process.on('SIGINT', () => { console.log("Bye bye!"); process.exit(); });
 var server = new RangerMock(portWS, markets);
 
 fs.watch('./mocks', (curr, prev) => {
-  console.log(`reloading mock websocket`);
-  server.close();
-  delete require.cache[require.resolve('./ranger.js')]
-  delete require.cache[require.resolve('./markets.js')]
-  RangerMock = require('./ranger.js')
-  markets = require('./markets.js');
-  server = new RangerMock(portWS, markets);
+    console.log(`reloading mock websocket`);
+    server.close();
+    delete require.cache[require.resolve('./ranger.js')]
+    delete require.cache[require.resolve('./markets.js')]
+    RangerMock = require('./ranger.js')
+    markets = require('./markets.js');
+    server = new RangerMock(portWS, markets);
 });

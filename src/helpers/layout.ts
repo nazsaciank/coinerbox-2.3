@@ -1,6 +1,19 @@
-import { LayoutGrid } from '../components/Grid';
 import { customLayouts } from '../custom/helpers/layout';
 import { isResizableGrid, isDraggableGrid} from '../api/config';
+
+export interface LayoutGridGeneralInterface {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    i: string;
+}
+
+export interface LayoutGrid {
+    lg: LayoutGridGeneralInterface[];
+    md: LayoutGridGeneralInterface[];
+    sm: LayoutGridGeneralInterface[];
+}
 
 export const getStaticHeight = () => {
     const header = document.getElementsByTagName('header')[0];

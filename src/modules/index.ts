@@ -6,6 +6,7 @@ import { AlertState, rootHandleAlertSaga } from './public/alert';
 import { ColorThemeState } from './public/colorTheme';
 import { ConfigsState, rootConfigsSaga } from './public/configs';
 import { CurrenciesState, rootCurrenciesSaga } from './public/currencies';
+import { CustomizationState, rootCustomizationSaga } from './public/customization';
 import { GridLayoutState } from './public/gridLayout';
 import { LanguageState } from './public/i18n';
 import { KlineState, rootKlineFetchSaga } from './public/kline';
@@ -23,6 +24,7 @@ import { rootApiKeysSaga } from './user/apiKeys/sagas';
 import { AuthState, rootAuthSaga } from './user/auth';
 import { BeneficiariesState, rootBeneficiariesSaga } from './user/beneficiaries';
 import { GeetestCaptchaState, rootGeetestCaptchaSaga } from './user/captcha';
+import { CustomizationUpdateState, rootCustomizationUpdateSaga } from './user/customization';
 import { EmailVerificationState, rootEmailVerificationSaga } from './user/emailVerification';
 import { HistoryState, rootHistorySaga } from './user/history';
 import { DocumentsState, rootSendDocumentsSaga } from './user/kyc/documents';
@@ -46,6 +48,7 @@ export * from './public/orderBook';
 export * from './public/colorTheme';
 export * from './public/configs';
 export * from './public/currencies';
+export * from './public/customization';
 export * from './public/i18n';
 export * from './public/kline';
 export * from './public/alert';
@@ -53,6 +56,7 @@ export * from './user/apiKeys';
 export * from './user/auth';
 export * from './user/beneficiaries';
 export * from './user/captcha';
+export * from './user/customization';
 export * from './user/wallets';
 export * from './user/profile';
 export * from './user/openOrders';
@@ -72,6 +76,7 @@ export interface RootState {
         colorTheme: ColorThemeState;
         configs: ConfigsState;
         currencies: CurrenciesState;
+        customization: CustomizationState;
         recentTrades: RecentTradesState;
         markets: MarketsState;
         orderBook: OrderBookState;
@@ -87,6 +92,7 @@ export interface RootState {
     user: {
         auth: AuthState;
         beneficiaries: BeneficiariesState;
+        customizationUpdate: CustomizationUpdateState;
         orders: OrdersState;
         password: PasswordState;
         profile: ProfileState;
@@ -119,6 +125,8 @@ export function* rootSaga() {
         call(rootBeneficiariesSaga),
         call(rootConfigsSaga),
         call(rootCurrenciesSaga),
+        call(rootCustomizationSaga),
+        call(rootCustomizationUpdateSaga),
         call(rootEmailVerificationSaga),
         call(rootGeetestCaptchaSaga),
         call(rootHandleAlertSaga),

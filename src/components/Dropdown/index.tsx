@@ -96,7 +96,7 @@ class DropdownComponent extends React.Component<DropdownComponentProps, Dropdown
         this.setState({
             selected: this.convertToString(elem),
             selectIndex: index.toString(),
-        });
+        }, () => typeof this.props.onSelect !== 'undefined' ? this.props.onSelect(index) : null);
     };
 
     private convertToString = (elem: DropdownElem) => {

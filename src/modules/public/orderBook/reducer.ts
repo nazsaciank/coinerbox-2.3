@@ -1,5 +1,5 @@
-import { defaultStorageLimit, orderBookSideLimit } from '../../../api';
-import { handleIncrementalUpdate, handleIncrementalUpdateArray } from '../../../helpers';
+import { orderBookSideLimit } from '../../../api';
+import { handleIncrementalUpdate, handleIncrementalUpdateArray, sliceArray } from '../../../helpers';
 import { DepthActions, OrderBookActions } from './actions';
 import {
     DEPTH_DATA,
@@ -52,8 +52,8 @@ export const orderBookReducer = (state = initialOrderBook, action: OrderBookActi
             const { asks, bids } = action.payload;
             return {
                 ...state,
-                asks: asks.slice(0, defaultStorageLimit()),
-                bids: bids.slice(0, defaultStorageLimit()),
+                asks: sliceArray(asks, orderBookSideLimit()),
+                bids: sliceArray(bids, orderBookSideLimit()),
                 loading: false,
                 error: undefined,
             };
@@ -80,8 +80,8 @@ export const depthReducer = (state = initialDepth, action: DepthActions): DepthS
             const { asks, bids } = action.payload;
             return {
                 ...state,
-                asks: asks.slice(0, defaultStorageLimit()),
-                bids: bids.slice(0, defaultStorageLimit()),
+                asks: sliceArray(asks, orderBookSideLimit()),
+                bids: sliceArray(bids, orderBookSideLimit()),
                 loading: false,
                 error: undefined,
             };
@@ -131,8 +131,8 @@ export const incrementDepthReducer = (state = initialIncrementDepth, action: Dep
             const { asks, bids, sequence } = action.payload;
             return {
                 ...state,
-                asks: asks.slice(0, defaultStorageLimit()),
-                bids: bids.slice(0, defaultStorageLimit()),
+                asks: sliceArray(asks, orderBookSideLimit()),
+                bids: sliceArray(bids, orderBookSideLimit()),
                 sequence,
                 loading: false,
             };

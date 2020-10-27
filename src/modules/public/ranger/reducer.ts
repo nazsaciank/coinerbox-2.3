@@ -1,4 +1,5 @@
 import { RangerAction } from './actions';
+import { defaultStorageLimit } from '../../../api';
 import {
     RANGER_CONNECT_DATA,
     RANGER_CONNECT_ERROR,
@@ -29,7 +30,7 @@ export const rangerReducer = (state = initialRangerState, action: RangerAction):
         case RANGER_SUBSCRIPTIONS_DATA:
             return {
                 ...state,
-                subscriptions: [...action.payload.subscriptions],
+                subscriptions: [...action.payload.subscriptions].slice(0, defaultStorageLimit()),
             };
         case RANGER_CONNECT_DATA:
             return {

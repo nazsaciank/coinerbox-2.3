@@ -1,4 +1,5 @@
 import { getUnique } from '../../../helpers/getUnique';
+import { defaultStorageLimit } from '../../../api';
 import { HistoryActions } from './actions';
 import {
     HISTORY_DATA,
@@ -31,7 +32,7 @@ export const historyReducer = (state = initialState, action: HistoryActions) => 
         case HISTORY_DATA:
             return {
                 ...state,
-                list: action.payload.list,
+                list: action.payload.list.slice(0, defaultStorageLimit()),
                 fetching: false,
                 page: action.payload.page,
                 nextPageExists: action.payload.nextPageExists,
@@ -45,7 +46,7 @@ export const historyReducer = (state = initialState, action: HistoryActions) => 
         case HISTORY_PUSH_FINISH: {
             let list = [...action.payload];
             list = getUnique(list, 'id');
-            return { ...state, list: list };
+            return { ...state, list: list.slice(0, defaultStorageLimit()) };
         }
         default:
             return state;

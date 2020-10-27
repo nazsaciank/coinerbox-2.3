@@ -135,7 +135,6 @@ class OrderInsert extends React.PureComponent<Props, StoreProps> {
 
             <div className={'pg-order'} ref={this.orderRef}>
                 {this.state.width > 448 ? headerContent : undefined}
-                //@ts-ignore
                 <Order
                     asks={asks}
                     bids={bids}
@@ -152,7 +151,6 @@ class OrderInsert extends React.PureComponent<Props, StoreProps> {
                     orderTypes={this.getOrderTypes}
                     currentMarketAskPrecision={currentMarket.amount_precision}
                     currentMarketBidPrecision={currentMarket.price_precision}
-                    /*formatMessage={this.props.intl.formatMessage}*/
                     width={this.state.width}
                     listenInputPrice={this.listenInputPrice}
                     {...translations}

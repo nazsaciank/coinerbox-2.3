@@ -144,7 +144,7 @@ const defaultOrderTypes: DropdownElem[] = [
 const splitBorder = 449;
 const defaultWidth = 635;
 
-class Order extends React.PureComponent<OrderComponentProps, State> {
+export class Order extends React.PureComponent<OrderComponentProps, State> {
     public state = {
         index: 0,
         amountSell: '',
@@ -190,11 +190,7 @@ class Order extends React.PureComponent<OrderComponentProps, State> {
         );
     }
 
-    private isTypeSell = (type: string) => {
-        return type === 'sell';
-    };
-
-    private getPanel = (type: FormType) => {
+    public getPanel = (type: FormType) => {
         const {
             availableBase,
             availableQuote,
@@ -227,7 +223,7 @@ class Order extends React.PureComponent<OrderComponentProps, State> {
         const available = this.isTypeSell(type) ? availableBase : availableQuote;
         const priceMarket = this.isTypeSell(type) ? priceMarketSell : priceMarketBuy;
         const submitButtonText = this.isTypeSell(type) ? submitSellButtonText : submitBuyButtonText;
-        const preLable = this.isTypeSell(type) ? labelSecond : labelFirst;
+        const preLabel = this.isTypeSell(type) ? labelSecond : labelFirst;
         const label = this.isTypeSell(type) ? 'Sell' : 'Buy';
         const disabledData = this.isTypeSell(type) ? {} : { disabled };
         const amount = this.isTypeSell(type) ? amountSell : amountBuy;
@@ -260,7 +256,7 @@ class Order extends React.PureComponent<OrderComponentProps, State> {
                     handleChangeAmountByButton={this.handleChangeAmountByButton}
                 />
             ),
-            label: preLable || label,
+            label: preLabel || label,
         };
 
     };
@@ -290,6 +286,7 @@ class Order extends React.PureComponent<OrderComponentProps, State> {
         const proposals = this.isTypeSell(type) ? bids : asks;
         const available = this.isTypeSell(type) ? availableBase : availableQuote;
         let newAmount = '';
+
         switch (type) {
             case 'buy':
                 switch (orderType) {
@@ -303,6 +300,7 @@ class Order extends React.PureComponent<OrderComponentProps, State> {
                         newAmount = available ? (
                             Decimal.format(getAmount(Number(available), proposals, value), this.props.currentMarketAskPrecision)
                         ) : '';
+
                         break;
                     default:
                         break;
@@ -313,6 +311,7 @@ class Order extends React.PureComponent<OrderComponentProps, State> {
                     Decimal.format(available * value, this.props.currentMarketAskPrecision)
                 ) : '';
                 break;
+
             default:
                 break;
         }
@@ -323,8 +322,6 @@ class Order extends React.PureComponent<OrderComponentProps, State> {
             this.setState({ amountBuy: newAmount });
         }
     };
-}
 
-export {
-    Order,
-};
+    private isTypeSell = (type: string) => type === 'sell';
+}

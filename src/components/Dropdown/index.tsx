@@ -34,20 +34,20 @@ export interface DropdownComponentProps {
 
 interface DropdownComponentState {
     selected: string;
-    selectIndex: string;
+    selectedIndex: string;
 }
 
 /**
  *  Cryptobase Dropdown that overrides default dropdown with list of options.
  */
-class DropdownComponent extends React.Component<DropdownComponentProps, DropdownComponentState> {
+class DropdownComponent extends React.PureComponent<DropdownComponentProps, DropdownComponentState> {
 
     constructor(props: DropdownComponentProps) {
         super(props);
         const selectedValue = this.props.placeholder || this.convertToString(this.props.list[0]);
         this.state = {
             selected: selectedValue,
-            selectIndex:  '0',
+            selectedIndex:  '0',
         };
     }
 
@@ -57,7 +57,7 @@ class DropdownComponent extends React.Component<DropdownComponentProps, Dropdown
         if (placeholder && placeholder !== prevProps.placeholder) {
             this.setState({
                 selected: placeholder,
-                selectIndex: '0',
+                selectedIndex: '0',
             });
         }
     }
@@ -93,10 +93,11 @@ class DropdownComponent extends React.Component<DropdownComponentProps, Dropdown
     };
 
     private handleSelect = (elem: DropdownElem, index:number) => {
+        this.props.onSelect && this.props.onSelect(index);
         this.setState({
             selected: this.convertToString(elem),
-            selectIndex: index.toString(),
-        }, () => typeof this.props.onSelect !== 'undefined' ? this.props.onSelect(index) : null);
+            selectedIndex: index.toString(),
+        });
     };
 
     private convertToString = (elem: DropdownElem) => {

@@ -103,6 +103,11 @@ const matchedTradesMock = (ws, marketId) => {
     let kind = "bid";
     let price = 0.0001;
     let volume = 0.0001;
+    
+    if (Math.random() > 0.1) {
+        return () => {};
+    }
+
     return function () {
         const orderId = orderIndex++;
         const tradeId = tradeIndex++;
@@ -123,8 +128,8 @@ const matchedTradesMock = (ws, marketId) => {
             setTimeout(() => {
             sendEvent(ws, "order", { "id": orderId, "at": at, "market": marketId, "kind": kind, "price": price, "state": "done", "remaining_volume": "0.0", "origin_volume": volume });
             sendEvent(ws, "trade", { "id": tradeId, "kind": kind, "at": at, "price": price, "volume": volume, "ask_id": askId, "bid_id": bidId, "market": marketId });
-            }, 1000);
-        }, 1000);
+            }, 10000);
+        }, 5000);
         }
         sendEvent(ws, `${marketId}.trades`, { "trades": [{ "tid": tradeId, "taker_type": takerType, "date": at, "price": price, "amount": volume }] });
     }

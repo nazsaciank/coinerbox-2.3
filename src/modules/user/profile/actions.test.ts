@@ -112,7 +112,6 @@ describe('Profile actions', () => {
             expect(actions.generate2faQRError(error)).toEqual(expectedAction);
         });
 
-
         it('should check changeUserDataFetch action creator', () => {
             const payload = {
                 user: {

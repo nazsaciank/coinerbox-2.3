@@ -138,7 +138,6 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
 
     public componentDidMount() {
         this.props.fetchConfigs();
-        this.props.fetchCustomization();
         this.props.userFetch();
         this.initInterval();
         this.check();

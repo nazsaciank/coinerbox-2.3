@@ -37,7 +37,7 @@ const defaultBeneficiary: Beneficiary = {
 };
 
 interface WithdrawState {
-    amount: number | string;
+    amount: string;
     beneficiary: Beneficiary;
     otpCode: string;
     withdrawAmountFocused: boolean;

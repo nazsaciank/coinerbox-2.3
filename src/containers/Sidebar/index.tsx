@@ -195,15 +195,20 @@ class SidebarContainer extends React.Component<Props, State> {
     private handleChangeLanguage = (language: string) => {
         const { user, isLoggedIn } = this.props;
         if (isLoggedIn) {
-            const payload = {
-                ...user,
-                data: JSON.stringify({ language }),
-            };
+            const data = user.data && JSON.parse(user.data);
 
-            this.props.changeUserDataFetch({ user: payload });
+            if (data.language !== language) {
+                const payload = {
+                    ...user,
+                    data: JSON.stringify({
+                        ...data,
+                        language,
+                    }),
+                };
+
+                this.props.changeUserDataFetch({ user: payload });
+            }
         }
-
-        this.props.changeLanguage(language);
     }
 }
 

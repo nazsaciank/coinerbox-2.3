@@ -16,15 +16,19 @@ import {
     selectDepthBids,
     selectDepthLoading,
     selectMarketTickers,
+    selectOpenOrdersList,
     setCurrentPrice,
+    Ticker,
 } from '../../modules';
+import { OrderCommon } from '../../modules/types';
 
 interface ReduxProps {
     asks: string[][];
     bids: string[][];
     colorTheme: string;
-    currentMarket: Market | undefined;
-    currentPrice: number | undefined;
+    currentMarket?: Market;
+    currentPrice?: number;
+    openOrdersList: OrderCommon[];
     orderBookLoading: boolean;
 }
 
@@ -63,12 +67,17 @@ class OrderBookContainer extends React.Component<Props, State> {
     }
 
     public shouldComponentUpdate(nextProps: Props) {
-        const { asks, bids, currentMarket } = this.props;
+        const { asks, bids, currentMarket, openOrdersList, marketTickers } = this.props;
+
+        const lastPrice = currentMarket && this.getTickerValue(currentMarket, marketTickers).last;
+        const nextLastPrice = nextProps.currentMarket && this.getTickerValue(nextProps.currentMarket, nextProps.marketTickers).last;
 
         return (
             JSON.stringify(nextProps.asks) !== JSON.stringify(asks) ||
             JSON.stringify(nextProps.bids) !== JSON.stringify(bids) ||
-            (nextProps.currentMarket && nextProps.currentMarket.id) !== (currentMarket && currentMarket.id)
+            (nextProps.currentMarket && nextProps.currentMarket.id) !== (currentMarket && currentMarket.id) ||
+            nextLastPrice !== lastPrice ||
+            nextProps.openOrdersList !== openOrdersList
         );
     }
 
@@ -119,25 +128,23 @@ class OrderBookContainer extends React.Component<Props, State> {
 
     private lastPrice = () => {
         const { marketTickers, currentMarket } = this.props;
-        const defaultTicker = {
-            last: 0,
-            price_change_percent: '+0.00%',
-        };
-        if (currentMarket && marketTickers[currentMarket.id] && marketTickers[currentMarket.id].price_change_percent) {
-          const cn = classNames('', {
-            'cr-combined-order-book__market-negative': (marketTickers[currentMarket.id] || defaultTicker).price_change_percent.includes('-'),
-            'cr-combined-order-book__market-positive': (marketTickers[currentMarket.id] || defaultTicker).price_change_percent.includes('+'),
-          });
-          return (
-              <React.Fragment>
-                  <span className={cn}>
-                      {Decimal.format(Number((marketTickers[currentMarket.id] || defaultTicker).last), currentMarket.price_precision)} {currentMarket.quote_unit.toUpperCase()}
-                  </span>
-                  <span>{this.props.intl.formatMessage({id: 'page.body.trade.orderbook.lastMarket'})}</span>
-              </React.Fragment>
+        const currentTicker = currentMarket && this.getTickerValue(currentMarket, marketTickers);
+
+        if (currentMarket && currentTicker) {
+            const cn = classNames('', {
+                'cr-combined-order-book__market-negative': currentTicker.price_change_percent.includes('-'),
+                'cr-combined-order-book__market-positive': currentTicker.price_change_percent.includes('+'),
+            });
+            return (
+                <React.Fragment>
+                    <span className={cn}>
+                        {Decimal.format(+(currentTicker.last), currentMarket.price_precision)} {currentMarket.quote_unit.toUpperCase()}
+                    </span>
+                    <span>{this.props.intl.formatMessage({id: 'page.body.trade.orderbook.lastMarket'})}</span>
+                </React.Fragment>
             );
         } else {
-          return <React.Fragment><span className={'cr-combined-order-book__market-negative'}>0</span><span>{this.props.intl.formatMessage({id: 'page.body.trade.orderbook.lastMarket'})}</span></React.Fragment>;
+            return <React.Fragment><span className={'cr-combined-order-book__market-negative'}>0</span><span>{this.props.intl.formatMessage({id: 'page.body.trade.orderbook.lastMarket'})}</span></React.Fragment>;
         }
     };
 
@@ -171,13 +178,13 @@ class OrderBookContainer extends React.Component<Props, State> {
                             <Decimal key={i} fixed={amountFixed}>{total[i]}</Decimal>,
                             <Decimal key={i} fixed={amountFixed}>{volume}</Decimal>,
                             <span key={i}><Decimal fixed={priceFixed} prevValue={array[i - 1] ? array[i - 1][0] : 0}>{price}</Decimal></span>,
-                            ];
+                        ];
                     } else {
                         return [
                             <span key={i}><Decimal fixed={priceFixed} prevValue={array[i - 1] ? array[i - 1][0] : 0}>{price}</Decimal></span>,
                             <Decimal key={i} fixed={amountFixed}>{volume}</Decimal>,
                             <Decimal key={i} fixed={amountFixed}>{total[i]}</Decimal>,
-                            ];
+                        ];
                     }
             }
         }) : [[[''], message]];
@@ -190,6 +197,7 @@ class OrderBookContainer extends React.Component<Props, State> {
             this.props.setCurrentPrice(priceToSet);
         }
     };
+
     private handleOnSelectAsks = (index: string) => {
         const { currentPrice, asks } = this.props;
         const isLarge = this.state.width >= breakpoint;
@@ -198,6 +206,12 @@ class OrderBookContainer extends React.Component<Props, State> {
         if (currentPrice !== priceToSet) {
             this.props.setCurrentPrice(priceToSet);
         }
+    };
+
+    private getTickerValue = (currentMarket: Market, tickers: { [key: string]: Ticker }) => {
+        const defaultTicker = { amount: 0, low: 0, last: 0, high: 0, volume: 0, open: 0, price_change_percent: '+0.00%' };
+
+        return tickers[currentMarket.id] || defaultTicker;
     };
 }
 
@@ -209,6 +223,7 @@ const mapStateToProps = (state: RootState) => ({
     currentMarket: selectCurrentMarket(state),
     currentPrice: selectCurrentPrice(state),
     marketTickers: selectMarketTickers(state),
+    openOrdersList: selectOpenOrdersList(state),
 });
 
 const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> =

@@ -249,7 +249,7 @@ export class Order extends React.Component<OrderComponentProps, State> {
                     totalText={totalText}
                     availableText={availableText}
                     submitButtonText={submitButtonText}
-                    totalPrice={getTotalPrice(amount, proposals)}
+                    totalPrice={getTotalPrice(amount, priceMarket, proposals)}
                     amount={amount}
                     listenInputPrice={listenInputPrice}
                     handleAmountChange={this.handleAmountChange}

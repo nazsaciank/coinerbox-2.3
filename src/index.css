@@ -1366,6 +1366,7 @@
     background: var(--body-background-color);
     display: -webkit-box;
     display: flex;
+    min-height: 600px;
     width: 100%;
   }
 .pg-wallet .cr-search {
@@ -7913,7 +7914,7 @@ header {
       margin-bottom: 12px;
     }
 .pg-blur__content__text {
-      color: var(--cta-layer-color);
+      color: var(--primary-text-color);
       font-size: 14px;
       font-weight: normal;
       letter-spacing: 0.1px;

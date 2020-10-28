@@ -4511,7 +4511,7 @@ header {
           }
 .pg-navbar__header-settings__switcher__items .switcher-item--active {
               background: var(--header-switcher-background-color-theme-active);
-              height: 20px;
+              height: 21px;
             }
 .pg-navbar__header-settings__account-dropdown {
         cursor: pointer;
@@ -7105,11 +7105,11 @@ header {
 .pg-sidebar-wrapper--active {
     -webkit-animation: slide-right 0.3s ease-out;
     -moz-animation: slide-right 0.3s ease-out;
-    bottom: 56px;
+    bottom: 0;
     display: block;
     left: 0;
     position: absolute;
-    top: 72px;
+    top: 64px;
   }
 .pg-sidebar-wrapper--hidden {
     -webkit-animation: slide-left 0.3s ease-out;
@@ -9516,7 +9516,7 @@ header {
         color: var(--dropdown-text-color-active) !important;
       }
 .cr-dropdown .dropdown-toggle::after {
-        left: 237px;
+        left: calc(100% - 30px);
         position: absolute;
         top: 21px;
       }

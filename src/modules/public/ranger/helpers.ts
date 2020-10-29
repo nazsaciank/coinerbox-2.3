@@ -43,6 +43,7 @@ export const streamsBuilder = (withAuth: boolean, prevSubscriptions: string[], m
             ...streams,
             'order',
             'trade',
+            'deposit_address',
         ];
 
         if (isFinexEnabled()) {

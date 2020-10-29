@@ -17,6 +17,7 @@ window.env = {
     isDraggable: false,
     languages: ['en', 'ru'],
     passwordEntropyStep: 14,
+    showLanding: true,
     kycSteps: [
         'email',
         'phone',

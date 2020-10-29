@@ -18,6 +18,7 @@ window.env = {
     languages: ['en', 'ru'],
     passwordEntropyStep: 14,
     showLanding: true,
+    sentryEnabled: false,
     kycSteps: [
         'email',
         'phone',

@@ -25,5 +25,6 @@ export interface Config {
     balancesFetchInterval: string;
     passwordEntropyStep: number;
     showLanding: boolean;
+    sentryEnabled?: boolean;
     kycSteps?: string[];
 }

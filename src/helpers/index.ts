@@ -2,6 +2,7 @@ export * from './accumulateVolume';
 export * from './areEqualProps';
 export * from './calcMaxVolume';
 export * from './capitalize';
+export * from './changeElementPosition';
 export * from './checkDate';
 export * from './convertRgbToHex';
 export * from './emailValidation';

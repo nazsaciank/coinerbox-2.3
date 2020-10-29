@@ -76,6 +76,7 @@ In `public/config` open `env.js`
 | `gaTrackerKey` |  Google Analytics tracker key  |
 | `rangerReconnectPeriod` |  Reconnection time for the Ranger WS service in minutes    |
 | `msAlertDisplayTime` |  Alert message display duration in milliseconds    |
+| `kycSteps` |  List of label names for KYC process    |
 
 ## Available Docker build args
 

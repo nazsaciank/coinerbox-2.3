@@ -1,7 +1,7 @@
 import * as React from 'react';
 import classnames from 'classnames';
 import { Button } from 'react-bootstrap';
-import { cleanPositiveFloatInput } from '../../helpers';
+import { cleanPositiveFloatInput, precisionRegExp } from '../../helpers';
 import { Decimal, DropdownComponent, PercentageButton, OrderInput, OrderProps} from '../';
 
 type OnSubmitCallback = (order: OrderProps) => void;
@@ -112,11 +112,6 @@ interface OrderFormState {
 
 const handleSetValue = (value: string | number | undefined, defaultValue: string) => (
     value || defaultValue
-);
-
-const precisionRegExp = (precision: number) => new RegExp(precision ?
-    `^(?:[\\d-]*\\.?[\\d-]{0,${precision}}|[\\d-]*\\.[\\d-])$` :
-    `^(?:[\\d-]*)$`,
 );
 
 export class OrderForm extends React.PureComponent<OrderFormProps, OrderFormState> {

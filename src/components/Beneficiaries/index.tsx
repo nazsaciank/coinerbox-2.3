@@ -154,9 +154,9 @@ class BeneficiariesComponent extends React.Component<Props, State> {
     };
 
     private renderDropdownItem = (item: Beneficiary, index: number, type: 'fiat' | 'coin') => {
-
+        const isPending = item.state && item.state.toLowerCase() === 'pending';
         const itemClassName = classnames('pg-beneficiaries__dropdown__body__item item', {
-            'item--pending': item.state && item.state.toLowerCase() === 'pending',
+            'item--pending': isPending,
         });
 
         if (type === 'fiat') {
@@ -171,6 +171,9 @@ class BeneficiariesComponent extends React.Component<Props, State> {
                         <span className="item__left__address">{item.data ? (item.data as BeneficiaryBank).full_name : ''}</span>
                     </div>
                     <div className="item__right">
+                        {isPending ? (
+                            <span className="item__right__pending">{this.translate('page.body.wallets.beneficiaries.dropdown.pending')}</span>
+                        ) : null}
                         <span className="item__right__delete" onClick={this.handleClickDeleteAddress(item)}><TrashBin/></span>
                     </div>
                 </div>
@@ -184,6 +187,9 @@ class BeneficiariesComponent extends React.Component<Props, State> {
                     <span className="item__left__address">{item.name}</span>
                 </div>
                 <div className="item__right">
+                    {isPending ? (
+                        <span className="item__right__pending">{this.translate('page.body.wallets.beneficiaries.dropdown.pending')}</span>
+                    ) : null}
                     <span className="item__right__delete" onClick={this.handleClickDeleteAddress(item)}><TrashBin/></span>
                 </div>
             </div>
@@ -272,6 +278,7 @@ class BeneficiariesComponent extends React.Component<Props, State> {
 
     private renderAddressDropdown = (beneficiaries: Beneficiary[], currentWithdrawalBeneficiary: Beneficiary, type: 'fiat' | 'coin') => {
         const { isOpenDropdown, isOpenTip } = this.state;
+        const isPending = currentWithdrawalBeneficiary.state && currentWithdrawalBeneficiary.state.toLowerCase() === 'pending';
 
         const dropdownClassName = classnames('pg-beneficiaries__dropdown', {
             'pg-beneficiaries__dropdown--open': isOpenDropdown,
@@ -288,9 +295,12 @@ class BeneficiariesComponent extends React.Component<Props, State> {
                             <span className="select__left__address">{currentWithdrawalBeneficiary.data ? (currentWithdrawalBeneficiary.data as BeneficiaryBank).full_name : ''}</span>
                         </div>
                         <div className="select__right">
-                        <span className="select__right__tip" onMouseOver={this.handleToggleTip} onMouseOut={this.handleToggleTip}><TipIcon/></span>
-                        <span className="select__right__select">{this.translate('page.body.wallets.beneficiaries.dropdown.select')}</span>
-                        <span className="select__right__chevron"><ChevronIcon /></span>
+                            {isPending ? (
+                                <span className="select__right__pending">{this.translate('page.body.wallets.beneficiaries.dropdown.pending')}</span>
+                            ) : null}
+                            <span className="select__right__tip" onMouseOver={this.handleToggleTip} onMouseOut={this.handleToggleTip}><TipIcon/></span>
+                            <span className="select__right__select">{this.translate('page.body.wallets.beneficiaries.dropdown.select')}</span>
+                            <span className="select__right__chevron"><ChevronIcon /></span>
                         </div>
                     </div>
                     {isOpenDropdown && this.renderDropdownBody(beneficiaries, type)}

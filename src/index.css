@@ -7350,13 +7350,19 @@ header {
 .pg-beneficiaries__dropdown__select__right__tip:hover svg path, .pg-beneficiaries__dropdown .select__right__tip:hover svg path {
                 fill: var(--primary-cta-color);
               }
-.pg-beneficiaries__dropdown__select__right__select, .pg-beneficiaries__dropdown .select__right__select {
+.pg-beneficiaries__dropdown__select__right__select,
+        .pg-beneficiaries__dropdown__select__right__pending,
+        .pg-beneficiaries__dropdown .select__right__select,
+        .pg-beneficiaries__dropdown .select__right__pending {
           color: var(--secondary-contrast-cta-color);
           font-size: 12px;
           font-style: normal;
           font-weight: normal;
           line-height: 12px;
           margin-right: 12px;
+        }
+.pg-beneficiaries__dropdown__select__right__pending, .pg-beneficiaries__dropdown .select__right__pending {
+          color: var(--primary-cta-color);
         }
 .pg-beneficiaries__dropdown__select__right__chevron, .pg-beneficiaries__dropdown .select__right__chevron {
           display: -webkit-box;
@@ -7445,7 +7451,8 @@ header {
 .pg-beneficiaries__dropdown--open .select__right__tip svg path, .pg-beneficiaries__dropdown--open .select__right__chevron svg path {
             fill: var(--cta-layer-color);
           }
-.pg-beneficiaries__dropdown--open .select__right__select {
+.pg-beneficiaries__dropdown--open .select__right__select,
+        .pg-beneficiaries__dropdown--open .select__right__pending {
           color: var(--cta-layer-color);
         }
 .pg-beneficiaries__dropdown--open .select__right__chevron {
@@ -7528,6 +7535,9 @@ header {
                   justify-content: flex-end;
           width: 25%;
         }
+.pg-beneficiaries__dropdown__body__item__right__pending, .pg-beneficiaries__dropdown__body .item__right__pending {
+            margin-right: 15px;
+          }
 .pg-beneficiaries__dropdown__body__item__right__delete, .pg-beneficiaries__dropdown__body .item__right__delete {
             height: 18px;
             width: 15px;

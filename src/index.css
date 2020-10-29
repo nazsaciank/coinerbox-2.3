@@ -7486,6 +7486,9 @@ header {
         padding: 0 22px 0 13px;
         width: 100%;
       }
+.pg-beneficiaries__dropdown__body__item--pending, .pg-beneficiaries__dropdown__body .item--pending {
+          background: var(--beneficiaries-primary-0-04);
+        }
 .pg-beneficiaries__dropdown__body__item__left, .pg-beneficiaries__dropdown__body .item__left {
           display: -webkit-box;
           display: flex;

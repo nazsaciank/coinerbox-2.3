@@ -7,6 +7,7 @@ import { PlusIcon } from '../../assets/images/PlusIcon';
 import { TipIcon } from '../../assets/images/TipIcon';
 import { TrashBin } from '../../assets/images/TrashBin';
 import {
+    beneficiariesCreateData,
     beneficiariesDelete,
     Beneficiary,
     BeneficiaryBank,
@@ -153,9 +154,14 @@ class BeneficiariesComponent extends React.Component<Props, State> {
     };
 
     private renderDropdownItem = (item: Beneficiary, index: number, type: 'fiat' | 'coin') => {
+
+        const itemClassName = classnames('pg-beneficiaries__dropdown__body__item item', {
+            'item--pending': item.state && item.state.toLowerCase() === 'pending',
+        });
+
         if (type === 'fiat') {
             return (
-                <div key={index} className="pg-beneficiaries__dropdown__body__item item">
+                <div key={index} className={itemClassName}>
                     <div className="item__left" onClick={this.handleClickSelectAddress(item)}>
                         <span className="item__left__title">{this.translate('page.body.wallets.beneficiaries.dropdown.fiat.name')}</span>
                         <span className="item__left__address">{item.name}</span>
@@ -172,7 +178,7 @@ class BeneficiariesComponent extends React.Component<Props, State> {
         }
 
         return (
-            <div key={index} className="pg-beneficiaries__dropdown__body__item item">
+            <div key={index} className={itemClassName}>
                 <div className="item__left" onClick={this.handleClickSelectAddress(item)}>
                     <span className="item__left__title">{this.translate('page.body.wallets.beneficiaries.dropdown.name')}</span>
                     <span className="item__left__address">{item.name}</span>
@@ -316,7 +322,12 @@ class BeneficiariesComponent extends React.Component<Props, State> {
     };
 
     private handleClickSelectAddress = (item: Beneficiary) => () => {
-        this.handleSetCurrentAddress(item);
+        if (item.state && item.state.toLowerCase() === 'pending') {
+            this.props.beneficiariesCreateData({ id: item.id });
+            this.handleToggleConfirmationModal();
+        } else {
+            this.handleSetCurrentAddress(item);
+        }
     };
 
     private handleClickToggleAddAddressModal = () => () => {
@@ -346,7 +357,7 @@ class BeneficiariesComponent extends React.Component<Props, State> {
 
     private handleFilterByState = (beneficiaries: Beneficiary[]) => {
         if (beneficiaries.length) {
-            return beneficiaries.filter(item => item.state.toLowerCase() === 'active');
+            return beneficiaries.filter(item => item.state.toLowerCase() === 'active' || item.state.toLowerCase() === 'pending');
         }
         return [];
     };
@@ -404,6 +415,7 @@ const mapStateToProps = (state: RootState): ReduxProps => ({
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = dispatch => ({
     deleteAddress: payload => dispatch(beneficiariesDelete(payload)),
     memberLevelsFetch: () => dispatch(memberLevelsFetch()),
+    beneficiariesCreateData: payload => dispatch(beneficiariesCreateData(payload)),
 });
 
 // tslint:disable-next-line:no-any

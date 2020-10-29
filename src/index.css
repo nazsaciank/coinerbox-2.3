@@ -552,7 +552,7 @@
   transition: 0.2s;
 }
 .btn-primary:hover {
-    background: var(--button-primary-cta-background-color-hover);
+    background-color: var(--button-primary-cta-background-color-hover);
     color: var(--button-primary-cta-text-color-hover);
     -webkit-transition: 0.2s;
     transition: 0.2s;
@@ -2693,7 +2693,7 @@
             margin-block-end: 0;
     -webkit-margin-before: 0;
             margin-block-start: 0;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
     -webkit-margin-end: 0;
             margin-inline-end: 0;
     -webkit-margin-start: 0;
@@ -2712,6 +2712,13 @@
             justify-content: flex-start;
     margin-bottom: 100px;
   }
+.pg-confirm__content-phone,
+    .pg-confirm__content-identity,
+    .pg-confirm__content-documents,
+    .pg-confirm__content-address {
+      max-width: 380px;
+      padding: 0 10px;
+    }
 .pg-confirm__content-phone__row,
       .pg-confirm__content-phone__forms__row,
       .pg-confirm__content-identity__row,
@@ -2898,8 +2905,7 @@
 .pg-confirm__content-deep {
     margin: 0;
     margin-top: 24px;
-    max-width: 380px;
-    padding: 0;
+    max-width: 100%;
     width: 100vw;
   }
 .pg-confirm__content-deep button {
@@ -4390,7 +4396,6 @@ header {
       }
 
   .pg-container {
-    height: 46px;
     -webkit-box-pack: center !important;
             justify-content: center !important;
   }
@@ -6613,9 +6618,7 @@ header {
   -webkit-box-pack: start;
           justify-content: flex-start;
   margin: 0;
-  margin-top: 33px;
   max-width: 380px;
-  padding: 0;
   width: 100vw;
 }
 .pg-confirm__content-documents__row {
@@ -7126,7 +7129,6 @@ header {
 .pg-profile-page-verification__step__button {
       -webkit-box-align: center;
               align-items: center;
-      border: 2px solid var(--system-green);
       border-radius: 4px;
       display: -webkit-box;
       display: flex;
@@ -7159,12 +7161,14 @@ header {
       }
 .pg-profile-page-verification__step__button--active,
       .pg-profile-page-verification__step__button--blocked {
-        background: var(--primary-cta-color);
-        border: 2px solid var(--primary-cta-color);
+        background: var(--button-primary-cta-background-color);
       }
 .pg-profile-page-verification__step__button--active span, .pg-profile-page-verification__step__button--blocked span {
           color: var(--primary-text-color);
         }
+.pg-profile-page-verification__step__button--active:hover {
+        background: var(--button-primary-cta-background-color-hover);
+      }
 .pg-profile-page-verification__step .tooltip-hover {
       background-color: var(--body-background-color-level-7);
       border-radius: 4px;
@@ -9952,7 +9956,7 @@ header {
   -webkit-box-pack: start;
           justify-content: flex-start;
   margin-top: 36px;
-  max-width: 380px;
+  max-width: 100%;
   width: 100vw;
 }
 .pg-upload-file__content {
@@ -10132,6 +10136,11 @@ header {
       position: fixed;
     }
 @media (max-width: 992px) {
+  .pg-upload-file {
+    -webkit-box-align: center;
+            align-items: center;
+  }
+
     .pg-upload-file__doc-image {
       margin: 0;
       position: relative;

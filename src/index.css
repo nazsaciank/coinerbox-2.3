@@ -10176,6 +10176,7 @@ header {
   --border-radius: 5px;
 }
 #root {
+  overflow-x: hidden;
   position: relative;
 }
 input[type=text],

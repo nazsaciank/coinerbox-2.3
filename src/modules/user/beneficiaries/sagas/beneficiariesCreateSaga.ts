@@ -2,12 +2,13 @@
 import { call, put } from 'redux-saga/effects';
 import { API, RequestOptions } from '../../../../api';
 import { alertPush } from '../../../';
+import { getCsrfToken } from '../../../../helpers';
 import {
     BeneficiariesCreate,
     beneficiariesCreateData,
     beneficiariesCreateError,
+    beneficiariesDataUpdate,
 } from '../actions';
-import { getCsrfToken } from '../../../../helpers';
 
 const config = (csrfToken?: string): RequestOptions => {
     return {
@@ -20,6 +21,7 @@ export function* beneficiariesCreateSaga(action: BeneficiariesCreate) {
     try {
         const payload = yield call(API.post(config(getCsrfToken())), '/account/beneficiaries', action.payload);
         yield put(beneficiariesCreateData(payload));
+        yield put(beneficiariesDataUpdate(payload));
         yield put(alertPush({message: ['success.beneficiaries.created'], type: 'success'}));
     } catch (error) {
         yield put(beneficiariesCreateError(error));

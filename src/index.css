@@ -8108,7 +8108,7 @@ header {
           border-color: var(--input-border-color-active);
         }
 .cr-deposit-crypto__copyable .custom-input {
-      width: 80%;
+      width: 75%;
     }
 .cr-deposit-crypto__copyable-title {
       background-color: inherit;

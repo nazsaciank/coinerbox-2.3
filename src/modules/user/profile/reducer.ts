@@ -41,6 +41,16 @@ export interface ProfileState {
     };
 }
 
+const ifUserIsLoggedIn = () => {
+    const csrfTokenExist = localStorage.getItem('csrfToken');
+
+    if (csrfTokenExist === null) {
+        return false;
+    }
+
+    return true;
+};
+
 const defaultUser = {
     email: '',
     level: 0,
@@ -66,7 +76,7 @@ export const initialStateProfile: ProfileState = {
     },
     userData: {
         user: defaultUser,
-        isFetching: true,
+        isFetching: ifUserIsLoggedIn(),
     },
 };
 

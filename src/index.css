@@ -2478,6 +2478,39 @@
         height: 60px;
       }
 }
+.pg-maintenance-screen {
+  display: -webkit-box;
+  display: flex;
+  height: 100vh;
+  justify-content: space-around;
+  width: 100%;
+}
+.pg-maintenance-screen__container {
+    text-align: center;
+  }
+.pg-maintenance-screen__container-header {
+      padding: 80px 0 120px 0;
+    }
+.pg-maintenance-screen__container-body-title {
+        color: var(--primary-text-color);
+        font-family: var(--font-family);
+        font-size: 48px;
+        font-weight: 500;
+        line-height: 56px;
+        max-width: 500px;
+        padding: 16px;
+      }
+.pg-maintenance-screen__container-body-subtitle {
+        color: var(--primary-text-color);
+        font-family: var(--font-family);
+        font-size: 22px;
+        font-weight: 300;
+        padding-top: 10px;
+      }
+.pg-maintenance-screen__background {
+    position: absolute;
+    top: 50px;
+  }
 .pg-history-tab {
   -webkit-box-align: start !important;
           align-items: flex-start !important;
@@ -4035,6 +4068,31 @@
       .pg-orders-tab .cr-table-container .cr-table {
         overflow: scroll;
       }
+  }
+.pg-restricted-screen {
+  -webkit-box-align: center;
+          align-items: center;
+  color: var(--primary-text-color);
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
+  height: 100vh;
+  -webkit-box-pack: center;
+          justify-content: center;
+  width: 100%;
+}
+.pg-restricted-screen__title {
+    font-size: 144px;
+    font-weight: bold;
+    letter-spacing: 10px;
+    line-height: 76px;
+  }
+.pg-restricted-screen__content {
+    font-size: 36px;
+    font-weight: 300;
+    padding-top: 36px;
   }
 .pg-customization {
   background: var(--customization-background-color);
@@ -10366,10 +10424,16 @@ body {
     width: calc(var(--gap) * 4.6) !important;
   }
 .pg-loader-container {
-  -webkit-filter: brightness(0.2);
-          filter: brightness(0.2);
-  margin-top: calc(var(--gap) * 2);
+  display: -webkit-box;
+  display: flex;
+  justify-content: space-around;
+  margin-top: calc(var(--gap) * 10);
 }
+.pg-loader-container .text-primary {
+    color: #fff !important;
+    height: 4rem;
+    width: 4rem;
+  }
 .cr-loader {
   position: absolute;
   top: 40%;

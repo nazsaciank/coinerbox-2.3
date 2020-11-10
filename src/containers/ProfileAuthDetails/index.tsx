@@ -2,17 +2,14 @@ import { Button } from 'react-bootstrap';
 import cr from 'classnames';
 import { History } from 'history';
 import * as React from 'react';
-import {
-    FormattedMessage,
-    InjectedIntlProps,
-    injectIntl,
-} from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { ProfileTwoFactorAuth } from '../';
 import { CustomInput, Modal } from '../../components';
 import { CloseIcon } from '../../assets/images/CloseIcon';
 import { PASSWORD_REGEX } from '../../helpers';
+import { IntlProps } from '../../index';
 import {
     RootState,
     selectUserInfo,
@@ -21,16 +18,12 @@ import {
 import {
     changePasswordFetch,
     selectChangePasswordSuccess,
-    selectTwoFactorAuthSuccess,
     toggle2faFetch,
-    toggleUser2fa,
 } from '../../modules/user/profile';
-
 
 interface ReduxProps {
     user: User;
     passwordChangeSuccess?: boolean;
-    toggle2FASuccess?: boolean;
 }
 
 interface RouterProps {
@@ -47,7 +40,6 @@ interface DispatchProps {
     changePassword: typeof changePasswordFetch;
     clearPasswordChangeError: () => void;
     toggle2fa: typeof toggle2faFetch;
-    toggleUser2fa: typeof toggleUser2fa;
 }
 
 interface ProfileProps {
@@ -67,7 +59,7 @@ interface State {
     code2FAFocus: boolean;
 }
 
-type Props = ReduxProps & DispatchProps & RouterProps & ProfileProps & InjectedIntlProps & OnChangeEvent;
+type Props = ReduxProps & DispatchProps & RouterProps & ProfileProps & IntlProps & OnChangeEvent;
 
 class ProfileAuthDetailsComponent extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -88,8 +80,6 @@ class ProfileAuthDetailsComponent extends React.Component<Props, State> {
     }
 
     public componentWillReceiveProps(next: Props) {
-        const { toggle2FASuccess } = this.props;
-
         if (next.passwordChangeSuccess) {
             this.setState({
                 showChangeModal: false,
@@ -98,10 +88,6 @@ class ProfileAuthDetailsComponent extends React.Component<Props, State> {
                 confirmationPassword: '',
                 confirmPasswordFocus: false,
             });
-        }
-
-        if (next.toggle2FASuccess && next.toggle2FASuccess !== toggle2FASuccess) {
-            this.props.toggleUser2fa();
         }
     }
 
@@ -427,14 +413,12 @@ class ProfileAuthDetailsComponent extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState): ReduxProps => ({
     user: selectUserInfo(state),
     passwordChangeSuccess: selectChangePasswordSuccess(state),
-    toggle2FASuccess: selectTwoFactorAuthSuccess(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     changePassword: ({ old_password, new_password, confirm_password }) =>
         dispatch(changePasswordFetch({ old_password, new_password, confirm_password })),
     toggle2fa: ({ code, enable }) => dispatch(toggle2faFetch({ code, enable })),
-    toggleUser2fa: () => dispatch(toggleUser2fa()),
 });
 
 const ProfileAuthDetailsConnected = injectIntl(connect(mapStateToProps, mapDispatchToProps)(ProfileAuthDetailsComponent));

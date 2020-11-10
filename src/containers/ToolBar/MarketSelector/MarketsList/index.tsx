@@ -1,11 +1,12 @@
 import { Decimal, Table } from '../../../../components';
 import classnames from 'classnames';
 import * as React from 'react';
-import { InjectedIntlProps, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { incrementalOrderBook } from '../../../../api';
 import { SortAsc, SortDefault, SortDesc } from '../../../../assets/images/SortIcons';
+import { IntlProps } from '../../../../index';
 import {
     depthFetch,
     Market,
@@ -54,7 +55,7 @@ const handleChangeSortIcon = (sortBy: string, id: string, reverseOrder: boolean)
     return <SortDefault/>;
 };
 
-type Props = ReduxProps & OwnProps & DispatchProps & InjectedIntlProps;
+type Props = ReduxProps & OwnProps & DispatchProps & IntlProps;
 
 class MarketsListComponent extends React.Component<Props, State> {
 
@@ -86,7 +87,7 @@ class MarketsListComponent extends React.Component<Props, State> {
         const { markets } = this.props;
         const marketToSet = markets.find(el => el.name === key);
 
-        this.props.setCurrentPrice();
+        this.props.setCurrentPrice(0);
         if (marketToSet) {
             this.props.setCurrentMarket(marketToSet);
             if (!incrementalOrderBook()) {
@@ -138,7 +139,7 @@ class MarketsListComponent extends React.Component<Props, State> {
             return {
                 ...market,
                 last: (marketTickers[market.id] || defaultTicker).last,
-                volume: (marketTickers[market.id] || defaultTicker).vol,
+                volume: (marketTickers[market.id] || defaultTicker).volume,
                 price_change_percent: (marketTickers[market.id] || defaultTicker).price_change_percent,
                 price_change_percent_num: Number.parseFloat((marketTickers[market.id] || defaultTicker).price_change_percent),
             };
@@ -165,7 +166,7 @@ class MarketsListComponent extends React.Component<Props, State> {
                 pV.push(cV);
             }
             return pV;
-        }, arr).map((market: Market & Ticker, index: number) => {
+        }, arr).map((market: any) => {
             const isPositive = /\+/.test((marketTickers[market.id] || defaultTicker).price_change_percent);
             const classname = classnames({
                 'pg-dropdown-markets-list-container__positive': isPositive,

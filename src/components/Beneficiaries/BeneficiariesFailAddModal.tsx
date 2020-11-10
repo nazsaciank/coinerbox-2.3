@@ -1,25 +1,30 @@
+import classnames from 'classnames';
 import * as React from 'react';
 import { History } from 'history';
-import { RouteProps, withRouter } from 'react-router-dom';
-import { InjectedIntlProps, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
+import { Link, RouteProps, withRouter } from 'react-router-dom';
+import { IntlProps } from '../../index';
+import { Modal } from '../../mobile/components/Modal';
 import { Button } from 'react-bootstrap';
 
 interface OwnProps {
     handleToggleFailModal: () => void;
     history: History;
+    isMobileDevice?: boolean;
 }
 
-type Props = OwnProps & InjectedIntlProps & RouteProps;
+type Props = OwnProps & IntlProps & RouteProps;
 
 class BeneficiariesFailAddModalComponent extends React.Component<Props> {
     public render() {
         return (
-            <div className="cr-modal beneficiaries-fail-modal">
-                <div className="cr-email-form">
-                    <this.ModalHeader />
-                    <this.ModalBody/>
-                </div>
-            </div>
+            this.props.isMobileDevice ?
+                <Modal
+                    isOpen
+                    onClose={this.props.handleToggleFailModal}
+                    title={this.translate('page.body.wallets.beneficiaries.failAddModal.content')}>
+                    {this.renderContent()}
+                </Modal> : this.renderContent()
         );
     }
 
@@ -47,7 +52,7 @@ class BeneficiariesFailAddModalComponent extends React.Component<Props> {
                     {this.translate('page.body.wallets.beneficiaries.failAddModal.content')}
                 </span>
                 <div className="cr-email-form__button-wrapper">
-                    <a href="/confirm">
+                    <Link to="/confirm">
                         <Button
                             size="lg"
                             variant="primary"
@@ -55,7 +60,22 @@ class BeneficiariesFailAddModalComponent extends React.Component<Props> {
                         >
                             {this.translate('page.body.wallets.beneficiaries.failAddModal.button')}
                         </Button>
-                    </a>
+                    </Link>
+                </div>
+            </div>
+        );
+    };
+
+    private renderContent = () => {
+        const className = classnames('beneficiaries-fail-modal', {
+            'cr-modal': !this.props.isMobileDevice,
+        });
+
+        return (
+            <div className={className}>
+                <div className="cr-email-form">
+                    <this.ModalHeader/>
+                    <this.ModalBody/>
                 </div>
             </div>
         );
@@ -65,4 +85,4 @@ class BeneficiariesFailAddModalComponent extends React.Component<Props> {
 }
 
 // tslint:disable-next-line:no-any
-export const BeneficiariesFailAddModal = withRouter(injectIntl(BeneficiariesFailAddModalComponent)) as any;
+export const BeneficiariesFailAddModal = withRouter(injectIntl(BeneficiariesFailAddModalComponent) as any) as any;

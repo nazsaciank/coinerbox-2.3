@@ -84,7 +84,12 @@ describe('orderBook reducer', () => {
     });
 
     it('should handle DEPTH_FETCH', () => {
-        const expectedState = { ...initialDepth, loading: true, error: undefined };
+        const expectedState = {
+            ...initialDepth,
+            loading: true,
+            error: undefined,
+            timestamp: Math.floor(Date.now() / 1000),
+        };
         expect(depthReducer(initialDepth, actions.depthFetch(fakeMarket))).toEqual(expectedState);
     });
 
@@ -444,20 +449,21 @@ describe('orderBook reducer', () => {
     });
 
     it('should handle DEPTH_INCREMENT_SUBSCRIBE', () => {
-        const marketId: MarketId = 'BTCUSD';
-        const fakeInitialState: DepthIncrementState = {
-        sequence: null,
-        asks: [],
-        bids: [],
-        loading: false,
+            const marketId: MarketId = 'BTCUSD';
+            const fakeInitialState: DepthIncrementState = {
+            sequence: null,
+            asks: [],
+            bids: [],
+            loading: false,
         };
 
         const expectedState: DepthIncrementState = {
-        sequence: null,
-        marketId: 'BTCUSD',
-        asks: [],
-        bids: [],
-        loading: true,
+            sequence: null,
+            marketId: 'BTCUSD',
+            asks: [],
+            bids: [],
+            loading: true,
+            timestamp: Math.floor(Date.now() / 1000),
         };
 
         expect(incrementDepthReducer(fakeInitialState, actions.depthIncrementSubscribe(marketId))).toEqual(expectedState);
@@ -466,19 +472,20 @@ describe('orderBook reducer', () => {
     it('does not set loading true on DEPTH_INCREMENT_SUBSCRIBE from the same market', () => {
         const marketId: MarketId = 'BTCUSD';
         const fakeInitialState: DepthIncrementState = {
-        sequence: null,
-        marketId: 'BTCUSD',
-        asks: [],
-        bids: [],
-        loading: false,
+            sequence: null,
+            marketId: 'BTCUSD',
+            asks: [],
+            bids: [],
+            loading: false,
         };
 
         const expectedState: DepthIncrementState = {
-        sequence: null,
-        marketId: 'BTCUSD',
-        asks: [],
-        bids: [],
-        loading: false,
+            sequence: null,
+            marketId: 'BTCUSD',
+            asks: [],
+            bids: [],
+            loading: false,
+            timestamp: Math.floor(Date.now() / 1000),
         };
 
         expect(incrementDepthReducer(fakeInitialState, actions.depthIncrementSubscribe(marketId))).toEqual(expectedState);

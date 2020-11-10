@@ -128,6 +128,10 @@ export interface OrderComponentProps {
      * start handling change price
      */
     listenInputPrice?: () => void;
+    /**
+     * default tab index
+     */
+    defaultTabIndex?: number;
 }
 
 interface State{
@@ -150,6 +154,15 @@ export class Order extends React.Component<OrderComponentProps, State> {
         amountSell: '',
         amountBuy: '',
     };
+
+    public componentDidMount() {
+        const { defaultTabIndex } = this.props;
+
+        if (defaultTabIndex !== undefined) {
+            this.handleChangeTab(defaultTabIndex);
+        }
+    }
+
     public render() {
         const {
             width = defaultWidth,

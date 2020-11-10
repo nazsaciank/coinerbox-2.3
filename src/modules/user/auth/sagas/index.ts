@@ -1,4 +1,3 @@
-// tslint:disable-next-line
 import { takeEvery, takeLatest } from 'redux-saga/effects';
 import {
     AUTH_LOGOUT_FETCH,

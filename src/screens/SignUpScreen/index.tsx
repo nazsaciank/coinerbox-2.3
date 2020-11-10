@@ -1,10 +1,9 @@
-import { Button } from 'react-bootstrap';
 import cx from 'classnames';
 import { History } from 'history';
 import * as React from 'react';
+import { Button } from 'react-bootstrap';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {
-    InjectedIntlProps,
     injectIntl,
 } from 'react-intl';
 import {
@@ -13,6 +12,7 @@ import {
     MapStateToProps,
 } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { compose } from 'redux';
 import { Modal, SignUpForm } from '../../components';
 import { GeetestCaptcha } from '../../containers';
 import {
@@ -21,21 +21,22 @@ import {
     ERROR_INVALID_PASSWORD,
     ERROR_PASSWORD_CONFIRMATION,
     PASSWORD_REGEX,
-    setDocumentTitle,
     passwordErrorFirstSolution,
     passwordErrorSecondSolution,
     passwordErrorThirdSolution,
+    setDocumentTitle,
 } from '../../helpers';
+import { IntlProps } from '../../index';
 import {
     Configs,
+    entropyPasswordFetch, LanguageState,
     RootState,
     selectConfigs,
     selectCurrentLanguage,
+    selectCurrentPasswordEntropy,
     selectSignUpError,
     selectSignUpRequireVerification,
     signUp,
-    entropyPasswordFetch,
-    selectCurrentPasswordEntropy,
 } from '../../modules';
 
 interface ReduxProps {
@@ -57,7 +58,12 @@ interface RouterProps {
     history: History;
 }
 
-type Props = ReduxProps & DispatchProps & RouterProps & InjectedIntlProps;
+interface OwnProps {
+    signUpError: boolean;
+    i18n: LanguageState['lang'];
+}
+
+type Props = ReduxProps & DispatchProps & RouterProps & IntlProps & OwnProps;
 
 export const extractRefID = (props: RouterProps) => new URLSearchParams(props.location.search).get('refid');
 
@@ -89,10 +95,10 @@ class SignUp extends React.Component<Props> {
 
     public constructor(props) {
         super(props);
-
         this.reCaptchaRef = React.createRef();
         this.geetestCaptchaRef = React.createRef();
     }
+
     private myRef = React.createRef<HTMLInputElement>();
     private passwordWrapper = React.createRef<HTMLDivElement>();
     private reCaptchaRef;
@@ -113,10 +119,6 @@ class SignUp extends React.Component<Props> {
         document.addEventListener('click', this.handleOutsideClick, false);
     }
 
-    public componentWillUnmount() {
-        document.removeEventListener('click', this.handleOutsideClick, false);
-    }
-
     public componentWillReceiveProps(nextProps: Props) {
         const { email } = this.state;
 
@@ -133,6 +135,10 @@ class SignUp extends React.Component<Props> {
                 this.setState({ shouldGeetestReset: true });
             }
         }
+    }
+
+    public componentWillUnmount() {
+        document.removeEventListener('click', this.handleOutsideClick, false);
     }
 
     public render() {
@@ -222,6 +228,7 @@ class SignUp extends React.Component<Props> {
             </div>
         );
     }
+
     private translate = (key: string) => this.props.intl.formatMessage({id: key});
 
     private renderCaptcha = () => {
@@ -251,7 +258,7 @@ class SignUp extends React.Component<Props> {
                 return null;
 
         }
-    }
+    };
 
     private handleOutsideClick = event => {
         const wrapperElement = this.passwordWrapper.current;
@@ -261,13 +268,17 @@ class SignUp extends React.Component<Props> {
                 passwordPopUp: false,
             });
         }
-    }
+    };
 
-    private handleCheckboxClick = () => {
-        this.setState({
-            hasConfirmed: !this.state.hasConfirmed,
-        });
-    }
+    private handleCheckboxClick = event => {
+        if (event) {
+            event.preventDefault();
+
+            this.setState({
+                hasConfirmed: !this.state.hasConfirmed,
+            });
+        }
+    };
 
     private handleChangeEmail = (value: string) => {
         this.setState({
@@ -374,17 +385,16 @@ class SignUp extends React.Component<Props> {
             captcha_response: value,
             shouldGeetestReset: false,
         });
-    }
+    };
 
     private handleSignUp = () => {
+        const { configs } = this.props;
         const {
             email,
             password,
             captcha_response,
             refId,
         } = this.state;
-
-        const { i18n, configs } = this.props;
 
         if (refId) {
             switch (configs.captcha_type) {
@@ -393,9 +403,6 @@ class SignUp extends React.Component<Props> {
                         email,
                         password,
                         refid: refId,
-                        data: JSON.stringify({
-                            language: i18n,
-                        }),
                     });
                     break;
                 case 'recaptcha':
@@ -405,7 +412,7 @@ class SignUp extends React.Component<Props> {
                         password,
                         captcha_response,
                         refid: refId,
-                    });
+                    } as any);
                     break;
                 default:
                     this.props.signUp({
@@ -413,9 +420,6 @@ class SignUp extends React.Component<Props> {
                         password,
                         captcha_response,
                         refid: refId,
-                        data: JSON.stringify({
-                            language: i18n,
-                        }),
                     });
                     break;
             }
@@ -425,9 +429,6 @@ class SignUp extends React.Component<Props> {
                     this.props.signUp({
                         email,
                         password,
-                        data: JSON.stringify({
-                            language: i18n,
-                        }),
                     });
                     break;
                 case 'recaptcha':
@@ -437,9 +438,6 @@ class SignUp extends React.Component<Props> {
                         email,
                         password,
                         captcha_response,
-                        data: JSON.stringify({
-                            language: i18n,
-                        }),
                     });
                     break;
             }
@@ -505,6 +503,7 @@ class SignUp extends React.Component<Props> {
                 passwordError: this.props.intl.formatMessage({ id: ERROR_INVALID_PASSWORD }),
                 hasConfirmed: false,
             });
+
             return;
         }
 
@@ -515,6 +514,7 @@ class SignUp extends React.Component<Props> {
                 passwordError: '',
                 hasConfirmed: false,
             });
+
             return;
         }
 
@@ -525,6 +525,7 @@ class SignUp extends React.Component<Props> {
                 passwordError: this.props.intl.formatMessage({ id: ERROR_INVALID_PASSWORD }),
                 hasConfirmed: false,
             });
+
             return;
         }
 
@@ -535,9 +536,10 @@ class SignUp extends React.Component<Props> {
                 passwordError: '',
                 hasConfirmed: false,
             });
+
             return;
         }
-    }
+    };
 }
 
 const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = state => ({
@@ -548,15 +550,14 @@ const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = state => ({
     currentPasswordEntropy: selectCurrentPasswordEntropy(state),
 });
 
-const mapDispatchProps: MapDispatchToPropsFunction<DispatchProps, {}> =
+const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> =
     dispatch => ({
         signUp: credentials => dispatch(signUp(credentials)),
         fetchCurrentPasswordEntropy: payload => dispatch(entropyPasswordFetch(payload)),
     });
 
-// tslint:disable-next-line:no-any
-const SignUpScreen = injectIntl(withRouter(connect(mapStateToProps, mapDispatchProps)(SignUp) as any));
-
-export {
-    SignUpScreen,
-};
+export const SignUpScreen = compose(
+    injectIntl,
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps),
+)(SignUp) as React.ComponentClass;

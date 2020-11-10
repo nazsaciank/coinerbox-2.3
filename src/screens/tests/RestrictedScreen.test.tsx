@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { InjectedIntlProps } from 'react-intl';
+import { IntlProps } from '../../index';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { rootReducer } from '../../modules';
@@ -8,7 +8,7 @@ import { RestrictedScreen } from '../RestrictedScreen';
 
 const store = createStore(rootReducer);
 
-const setup = (props: Partial<InjectedIntlProps> = {}) =>
+const setup = (props: Partial<IntlProps> = {}) =>
     shallow(
         <Provider store={store}>
             <RestrictedScreen />

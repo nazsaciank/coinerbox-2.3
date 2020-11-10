@@ -1,13 +1,38 @@
-import { Spinner } from 'react-bootstrap';
 import * as React from 'react';
-import { InjectedIntlProps, injectIntl } from 'react-intl';
+import { Spinner } from 'react-bootstrap';
+import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { compose } from 'redux';
 import { Route, RouterProps, Switch } from 'react-router';
 import { Redirect, withRouter } from 'react-router-dom';
+import { compose } from 'redux';
 import { minutesUntilAutoLogout, sessionCheckInterval, showLanding } from '../../api';
+import { ExpiredSessionModal } from '../../components';
 import { WalletsFetch } from '../../containers';
 import { toggleColorTheme } from '../../helpers';
+import { IntlProps } from '../../index';
+import {
+    ChangeForgottenPasswordMobileScreen,
+    ConfirmMobileScreen,
+    EmailVerificationMobileScreen,
+    ForgotPasswordMobileScreen,
+    LandingScreenMobile,
+    OrdersMobileScreen,
+    ProfileAccountActivityMobileScreen,
+    ProfileApiKeysMobileScreen,
+    ProfileAuthMobileScreen,
+    ProfileChangePasswordMobileScreen,
+    ProfileLanguageMobileScreen,
+    ProfileMobileScreen,
+    ProfileThemeMobileScreen,
+    ProfileVerificationMobileScreen,
+    SelectedWalletMobileScreen,
+    SignInMobileScreen,
+    SignUpMobileScreen,
+    TradingScreenMobile,
+    WalletDeposit,
+    WalletsMobileScreen,
+    WalletWithdraw,
+} from '../../mobile/screens';
 import {
     configsFetch,
     logoutFetch,
@@ -17,6 +42,7 @@ import {
     selectConfigsSuccess,
     selectCurrentColorTheme,
     selectCurrentMarket,
+    selectMobileDeviceState,
     selectPlatformAccessStatus,
     selectUserFetching,
     selectUserInfo,
@@ -50,7 +76,6 @@ import {
     VerificationScreen,
     WalletsScreen,
 } from '../../screens';
-import { ExpiredSessionModal } from '../../components';
 
 interface ReduxProps {
     colorTheme: string;
@@ -58,6 +83,7 @@ interface ReduxProps {
     customization?: CustomizationDataInterface;
     user: User;
     isLoggedIn: boolean;
+    isMobileDevice: boolean;
     userLoading?: boolean;
     platformAccessStatus: string;
     configsLoading: boolean;
@@ -82,7 +108,11 @@ interface LayoutState {
     isShownExpSessionModal: boolean;
 }
 
-export type LayoutProps = ReduxProps & DispatchProps & LocationProps & InjectedIntlProps;
+interface OwnProps {
+    toggleChartRebuild: typeof toggleChartRebuild;
+}
+
+export type LayoutProps = ReduxProps & DispatchProps & LocationProps & IntlProps & OwnProps;
 
 const renderLoader = () => (
     <div className="pg-loader-container">
@@ -121,6 +151,7 @@ const PublicRoute: React.FunctionComponent<any> = ({ component: CustomComponent,
     }
 
     const renderCustomerComponent = props => <CustomComponent {...props} />;
+
     return <Route {...rest} render={renderCustomerComponent} />;
 };
 
@@ -227,18 +258,52 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
         const {
             colorTheme,
             isLoggedIn,
+            isMobileDevice,
             userLoading,
             location,
             configsLoading,
             platformAccessStatus,
         } = this.props;
         const { isShownExpSessionModal } = this.state;
-
         const tradingCls = location.pathname.includes('/trading') ? 'trading-layout' : '';
         toggleColorTheme(colorTheme);
 
         if (configsLoading && !platformAccessStatus.length) {
             return renderLoader();
+        }
+
+        if (isMobileDevice) {
+            return (
+                <div className={'container-fluid pg-layout pg-layout--mobile'}>
+                    <Switch>
+                        <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/signin" component={SignInMobileScreen} />
+                        <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/signup" component={SignUpMobileScreen} />
+                        <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/forgot_password" component={ForgotPasswordMobileScreen} />
+                        <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/accounts/password_reset" component={ChangeForgottenPasswordMobileScreen} />
+                        <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/accounts/confirmation" component={VerificationScreen} />
+                        <PublicRoute loading={userLoading} isLogged={isLoggedIn} path="/email-verification" component={EmailVerificationMobileScreen} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/wallets/:currency/history" component={SelectedWalletMobileScreen} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/wallets/:currency/deposit" component={WalletDeposit} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/wallets/:currency/withdraw" component={WalletWithdraw} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/confirm" component={ConfirmMobileScreen} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/wallets" component={WalletsMobileScreen} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/orders" component={OrdersMobileScreen} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/profile/account-activity" component={ProfileAccountActivityMobileScreen} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/profile/api-keys" component={ProfileApiKeysMobileScreen} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/profile/language" component={ProfileLanguageMobileScreen} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/profile/2fa" component={ProfileAuthMobileScreen} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/profile/change-password" component={ProfileChangePasswordMobileScreen} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/profile/verification" component={ProfileVerificationMobileScreen} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/profile/theme" component={ProfileThemeMobileScreen} />
+                        <PrivateRoute loading={userLoading} isLogged={isLoggedIn} path="/profile" component={ProfileMobileScreen} />
+                        <Route exact={true} path="/trading/:market?" component={TradingScreenMobile} />
+                        {showLanding() && <Route exact={true} path="/" component={LandingScreenMobile} />}
+                        <Route path="**"><Redirect to="/trading/" /></Route>
+                    </Switch>
+                    {isLoggedIn && <WalletsFetch />}
+                    {isShownExpSessionModal && this.handleRenderExpiredSessionModal()}
+                </div>
+            );
         }
 
         return (
@@ -273,6 +338,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
         if (localStorage.getItem(STORE_KEY) !== null) {
             return parseInt(localStorage.getItem(STORE_KEY) || '0', 10);
         }
+
         return 0;
     };
 
@@ -307,6 +373,7 @@ class LayoutComponent extends React.Component<LayoutProps, LayoutState> {
             if (user.state === 'active') {
                 this.handleChangeExpSessionModalState();
             }
+
             this.props.logout();
         }
     };
@@ -360,6 +427,7 @@ const mapStateToProps: MapStateToProps<ReduxProps, {}, RootState> = state => ({
     customization: selectCustomizationData(state),
     user: selectUserInfo(state),
     isLoggedIn: selectUserLoggedIn(state),
+    isMobileDevice: selectMobileDeviceState(state),
     userLoading: selectUserFetching(state),
     platformAccessStatus: selectPlatformAccessStatus(state),
 });

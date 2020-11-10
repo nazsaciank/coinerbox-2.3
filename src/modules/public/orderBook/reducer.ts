@@ -75,6 +75,7 @@ export const depthReducer = (state = initialDepth, action: DepthActions): DepthS
                 ...state,
                 loading: true,
                 error: undefined,
+                timestamp: Math.floor(Date.now() / 1000),
             };
         case DEPTH_DATA:
             const { asks, bids } = action.payload;
@@ -103,6 +104,7 @@ export const incrementDepthReducer = (state = initialIncrementDepth, action: Dep
                 ...state,
                 marketId: action.payload,
                 loading: state.marketId === undefined || state.marketId !== action.payload,
+                timestamp: Math.floor(Date.now() / 1000),
             };
         case DEPTH_DATA_INCREMENT:
             const payload = {

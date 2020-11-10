@@ -1,10 +1,11 @@
 import { Spinner } from 'react-bootstrap';
 import classnames from 'classnames';
 import * as React from 'react';
-import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { OpenOrders } from '../../components';
 import { localeDate, preciseData, setTradeColor } from '../../helpers';
+import { IntlProps } from '../../index';
 import {
     Market,
     openOrdersCancelFetch,
@@ -34,7 +35,7 @@ interface DispatchProps {
     ordersCancelAll: typeof ordersCancelAllFetch;
 }
 
-type Props = ReduxProps & DispatchProps & InjectedIntlProps;
+type Props = ReduxProps & DispatchProps & IntlProps;
 
 export class OpenOrdersContainer extends React.Component<Props> {
     public componentDidMount() {
@@ -89,8 +90,8 @@ export class OpenOrdersContainer extends React.Component<Props> {
     };
 
     private renderHeaders = () => {
-        const currentAskUnit = this.props.currentMarket ? ` (${this.props.currentMarket.base_unit.toUpperCase()})` : null;
-        const currentBidUnit = this.props.currentMarket ? ` (${this.props.currentMarket.quote_unit.toUpperCase()})` : null;
+        const currentAskUnit = this.props.currentMarket ? ` (${this.props.currentMarket.base_unit.toUpperCase()})` : '';
+        const currentBidUnit = this.props.currentMarket ? ` (${this.props.currentMarket.quote_unit.toUpperCase()})` : '';
         return [
             this.translate('page.body.trade.header.openOrders.content.date'),
             this.translate('page.body.trade.header.openOrders.content.price').concat(currentBidUnit),
@@ -149,7 +150,7 @@ export class OpenOrdersContainer extends React.Component<Props> {
 
     private handleCancelAll = () => {
         const { currentMarket } = this.props;
-        this.props.ordersCancelAll({ market: currentMarket.id });
+        currentMarket && this.props.ordersCancelAll({ market: currentMarket.id });
     }
 }
 
@@ -174,4 +175,4 @@ export const OpenOrdersComponent = injectIntl(
         mapStateToProps,
         mapDispatchToProps,
     )(OpenOrdersContainer),
-);
+) as React.FunctionComponent;

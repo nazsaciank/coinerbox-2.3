@@ -3,11 +3,11 @@ import { call, put } from 'redux-saga/effects';
 import { API, RequestOptions } from '../../../../api';
 import { alertPush } from '../../../';
 import {
+    ordersCancelAllData,
     ordersCancelAllError,
     OrdersCancelAllFetch,
 } from '../actions';
 import { getCsrfToken, getOrderAPI } from '../../../../helpers';
-
 
 const ordersCancelAllOptions = (csrfToken?: string): RequestOptions => {
     return {
@@ -19,6 +19,7 @@ const ordersCancelAllOptions = (csrfToken?: string): RequestOptions => {
 export function* ordersCancelAllSaga(action: OrdersCancelAllFetch) {
     try {
         yield call(API.post(ordersCancelAllOptions(getCsrfToken())), '/market/orders/cancel', action.payload);
+        yield put(ordersCancelAllData());
         yield put(alertPush({ message: ['success.order.cancelling.all'], type: 'success'}));
     } catch (error) {
         yield put(ordersCancelAllError());

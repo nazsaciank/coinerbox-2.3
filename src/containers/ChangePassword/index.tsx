@@ -1,11 +1,8 @@
 import { CustomInput } from '../../components';
 import { Button } from 'react-bootstrap';
 import * as React from 'react';
-import {
-    FormattedMessage,
-    InjectedIntlProps,
-    injectIntl,
-} from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { IntlProps } from '../../index';
 
 type OnClearError = () => void;
 type OnSubmitChangePassword = (oldPassword: string, newPassword: string, confirmPassword: string) => void;
@@ -22,7 +19,7 @@ interface ChangePasswordState {
     newPassword: string;
 }
 
-type Props = ChangePasswordProps & InjectedIntlProps;
+type Props = ChangePasswordProps & IntlProps;
 
 class ChangePasswordComponent extends React.Component<Props, ChangePasswordState> {
     constructor(props: Props) {
@@ -154,4 +151,4 @@ class ChangePasswordComponent extends React.Component<Props, ChangePasswordState
     };
 }
 
-export const ChangePassword = injectIntl(ChangePasswordComponent);
+export const ChangePassword = injectIntl(ChangePasswordComponent) as any;

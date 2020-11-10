@@ -2,10 +2,8 @@ import { Spinner } from 'react-bootstrap';
 import { Decimal, Markets } from '../../components';
 import classnames from 'classnames';
 import * as React from 'react';
-import {
-    InjectedIntlProps,
-    injectIntl,
-} from 'react-intl';
+import { injectIntl } from 'react-intl';
+import { IntlProps } from '../../index';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { incrementalOrderBook } from '../../api';
 import { RootState, selectUserInfo, setCurrentPrice, User } from '../../modules';
@@ -38,7 +36,7 @@ interface DispatchProps {
     setCurrentPrice: typeof setCurrentPrice;
 }
 
-type Props = ReduxProps & DispatchProps & InjectedIntlProps;
+type Props = ReduxProps & DispatchProps & IntlProps;
 
 class MarketsContainer extends React.Component<Props> {
     private headers = [
@@ -101,9 +99,9 @@ class MarketsContainer extends React.Component<Props> {
     private handleOnSelect = (index: string) => {
         const { markets, currentMarket } = this.props;
         const marketToSet = markets.find(el => el.name === index);
-        this.props.setCurrentPrice();
+        this.props.setCurrentPrice(0);
 
-        if (!currentMarket || currentMarket.id !== marketToSet.id) {
+        if (marketToSet && (!currentMarket || currentMarket.id !== marketToSet.id)) {
             this.props.setCurrentMarket(marketToSet);
             if (!incrementalOrderBook()) {
               this.props.depthFetch(marketToSet);
@@ -128,4 +126,4 @@ const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> =
         setCurrentPrice: payload => dispatch(setCurrentPrice(payload)),
     });
 
-export const MarketsComponent = injectIntl(connect(mapStateToProps, mapDispatchToProps)(MarketsContainer));
+export const MarketsComponent = injectIntl(connect(mapStateToProps, mapDispatchToProps)(MarketsContainer)) as any;

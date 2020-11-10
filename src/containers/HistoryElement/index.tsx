@@ -1,9 +1,7 @@
 import { Spinner } from 'react-bootstrap';
 import * as React from 'react';
-import {
-    InjectedIntlProps,
-    injectIntl,
-} from 'react-intl';
+import { injectIntl } from 'react-intl';
+import { IntlProps } from '../../index';
 import {connect, MapDispatchToPropsFunction} from 'react-redux';
 import { compose } from 'redux';
 import { History, Decimal, Pagination } from '../../components';
@@ -54,7 +52,7 @@ interface DispatchProps {
     fetchHistory: typeof fetchHistory;
 }
 
-type Props = HistoryProps & ReduxProps & DispatchProps & InjectedIntlProps;
+type Props = HistoryProps & ReduxProps & DispatchProps & IntlProps;
 
 class HistoryComponent extends React.Component<Props> {
     public componentDidMount() {

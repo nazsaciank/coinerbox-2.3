@@ -1,11 +1,12 @@
 import { Button, Form} from 'react-bootstrap';
 import cr from 'classnames';
 import * as React from 'react';
-import { InjectedIntlProps, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect, MapDispatchToPropsFunction } from 'react-redux';
 import { withRouter } from 'react-router';
 import { CopyableTextField, CustomInput, Table } from '../../components';
 import { localeDate } from '../../helpers/localeDate';
+import { IntlProps } from '../../index';
 
 import {
     alertPush,
@@ -48,7 +49,7 @@ interface ProfileApiKeysState {
     codeFocused: boolean;
 }
 
-type Props = ReduxProps & DispatchProps & InjectedIntlProps;
+type Props = ReduxProps & DispatchProps & IntlProps;
 
 class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState> {
     public state = {
@@ -200,6 +201,8 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
 
     private renderModalBody = () => {
         const {otpCode, codeFocused} = this.state;
+        const { modal } = this.props;
+        const secret = (modal && modal.apiKey) ? modal.apiKey.secret : '';
         const emailGroupClass = cr('cr-email-form__group', {
             'cr-email-form__group--focused': codeFocused,
         });
@@ -240,7 +243,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                                 <CopyableTextField
                                   className="pg-copyable-text-field__input"
                                   fieldId={'access-key-id'}
-                                  value={this.props.modal.apiKey.kid}
+                                  value={(modal.apiKey && modal.apiKey.kid) || ''}
                                   copyButtonText={this.t('page.body.profile.content.copyLink')}
                                   label={this.t('page.body.profile.apiKeys.modal.access_key')}
                                 />
@@ -260,7 +263,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                                 <CopyableTextField
                                   className="pg-copyable-text-field__input"
                                   fieldId={'secret_key-id'}
-                                  value={this.props.modal.apiKey.secret.data ? this.props.modal.apiKey.secret.data.value : this.props.modal.apiKey.secret}
+                                  value={secret || ''}
                                   copyButtonText={this.t('page.body.profile.content.copyLink')}
                                   label={this.t('page.body.profile.apiKeys.modal.secret_key')}
                                 />
@@ -286,7 +289,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
                         size="lg"
                         variant="primary"
                     >
-                        {this.props.modal.apiKey.state === 'active' ?
+                        {modal.apiKey && modal.apiKey.state === 'active' ?
                             this.t('page.body.profile.apiKeys.modal.btn.disabled') :
                             this.t('page.body.profile.apiKeys.modal.btn.activate')}
                     </Button>
@@ -407,7 +410,7 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
     };
 
     private handleUpdateKey = () => {
-        const apiKey: ApiKeyDataInterface = {...this.props.modal.apiKey};
+        const apiKey: ApiKeyDataInterface = {...this.props.modal.apiKey} as any;
         apiKey.state = apiKey.state === 'active' ? 'disabled' : 'active';
         const payload: ApiKeyUpdateFetch['payload'] = {totp_code: this.state.otpCode, apiKey: apiKey};
         this.props.updateApiKey(payload);
@@ -425,7 +428,8 @@ class ProfileApiKeysComponent extends React.Component<Props, ProfileApiKeysState
     };
 
     private handleDeleteKey = () => {
-        const payload: ApiKeyDeleteFetch['payload'] = {kid: this.props.modal.apiKey.kid, totp_code: this.state.otpCode};
+        const { modal } = this.props;
+        const payload: ApiKeyDeleteFetch['payload'] = {kid: (modal.apiKey && modal.apiKey.kid) || '', totp_code: this.state.otpCode};
         this.props.deleteApiKey(payload);
         this.setState({otpCode: ''});
     }
@@ -448,7 +452,7 @@ const mapDispatchToProps: MapDispatchToPropsFunction<DispatchProps, {}> =
         fetchSuccess: payload => dispatch(alertPush(payload)),
     });
 
-const connected = injectIntl(connect(mapStateToProps, mapDispatchToProps)(ProfileApiKeysComponent));
+const connected = injectIntl(connect(mapStateToProps, mapDispatchToProps)(ProfileApiKeysComponent)) as any;
 const ProfileApiKeys = withRouter(connected);
 
 export {

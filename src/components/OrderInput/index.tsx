@@ -19,6 +19,10 @@ export interface OrderInputProps {
      */
     isFocused: boolean;
     /**
+     * Checking if input wrong
+     */
+    isWrong?: boolean;
+    /**
      * Label on the border
      */
     label?: string;
@@ -49,14 +53,27 @@ export interface OrderInputProps {
  * Input with cryptocurrency icon and label.
  */
 export const OrderInput: React.FunctionComponent<OrderInputProps> = React.memo((props: OrderInputProps) => {
-    const { currency, className, isFocused, label, placeholder, value, handleChangeValue, onKeyPress, handleFocusInput } = props;
+    const {
+        className,
+        currency,
+        handleChangeValue,
+        handleFocusInput,
+        isFocused,
+        isWrong,
+        label,
+        onKeyPress,
+        placeholder,
+        value,
+    } = props;
     const cx = cr('cr-order-input', className);
 
     const fieldsetFocusedClass = cr('cr-order-input__fieldset', {
-        'cr-order-input__fieldset cr-order-input__fieldset--focused': isFocused,
-    });
-    const cryptoIconClass = cr('cr-order-input__crypto-icon',{
         'cr-order-input__fieldset--focused': isFocused,
+        'cr-order-input__fieldset--wrong': isWrong,
+    });
+    const cryptoIconClass = cr('cr-order-input__crypto-icon', {
+        'cr-order-input__fieldset--focused': isFocused,
+        'cr-order-input__fieldset--wrong': isWrong,
     });
 
     return (

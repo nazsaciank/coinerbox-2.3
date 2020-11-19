@@ -33,6 +33,8 @@ const defaultProps = {
     handleChangeAmountByButton: spy(),
     amount: '1.5',
     totalPrice: 0,
+    currentMarketFilters: [],
+    translate: jest.fn(),
 };
 
 const setup = (props: Partial<OrderFormProps> = {}) =>
@@ -164,7 +166,7 @@ describe('OrderForm', () => {
         expect(submitButton.props().disabled).toBe(true);
     });
 
-    const findInputPrice = (wrapper: ShallowWrapper) => wrapper.find('.cr-order-item').at(1).find('div').last().children().last();
+    const findInputPrice = (wrapper: ShallowWrapper) => wrapper.find('.cr-order-item').at(1).find('div').first().children().first();
 
     it('should handle change price when it was set as priceLimit', () => {
         const wrapper = setup();

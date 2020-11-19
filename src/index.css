@@ -5495,7 +5495,7 @@ header {
             border-bottom-left-radius: calc(var(--gap) * 0.761);
             border-top-left-radius: calc(var(--gap) * 0.761);
             margin-top: calc(var(--gap) * 1.3);
-            padding: calc(var(--gap) * 1) calc(var(--gap) * 2);
+            padding: 0 calc(var(--gap) * 2);
           }
 
             .pg-order .cr-order .cr-tab-panel .cr-tab-content .cr-order-item .cr-order-input__fieldset__label {
@@ -8545,6 +8545,35 @@ header {
   margin-bottom: calc(var(--gap) * 2);
   width: 100%;
 }
+.cr-order-item .error-message {
+    -webkit-box-align: center;
+            align-items: center;
+    background: var(--system-red);
+    border-radius: 2px;
+    color: var(--primary-text-color);
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+            flex-direction: row;
+    font-size: 12px;
+    height: 24px;
+    margin-top: 80px;
+    opacity: 0;
+    padding: 0 14px;
+    position: fixed;
+    -webkit-transition: 0.2s;
+    transition: 0.2s;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    width: calc(100% - var(--gap) * 4);
+    z-index: 10;
+  }
+.cr-order-item .error-message--visible {
+      opacity: 1;
+    }
 .cr-order-item .cr-dropdown,
   .cr-order-item .cr-order-input,
   .cr-order-item__percentage-buttons,
@@ -9548,6 +9577,7 @@ header {
     border: 1px solid var(--input-border-color);
     color: var(--input-text-color);
     display: inline-block;
+    height: 51px;
     margin: 0;
     margin-top: calc(var(--gap) * 2);
     position: relative;
@@ -9562,21 +9592,36 @@ header {
 .cr-order-input__fieldset .custom-input .form-control {
         border: none;
         box-shadow: none;
+        height: 49px;
         padding: 0;
       }
 .cr-order-input__fieldset--focused {
-      border: 1px solid var(--input-border-color-active) !important;
+      border-color: var(--input-border-color-active) !important;
     }
 .cr-order-input__fieldset--focused label {
         color: var(--input-legend-color-active);
       }
+.cr-order-input__fieldset--wrong {
+      border-color: var(--system-red) !important;
+    }
+.cr-order-input__fieldset--wrong label {
+        color: var(--system-red);
+      }
 .cr-order-input__crypto-icon {
+    -webkit-box-align: center;
+            align-items: center;
     background-color: var(--input-background-color);
     border: 1px solid var(--input-border-color);
     border-left: none;
-    display: inline-block;
+    display: -webkit-box;
+    display: flex;
+    height: 51px;
+    -webkit-box-pack: center;
+            justify-content: center;
     margin-top: calc(var(--gap) * 2);
-    padding: calc(var(--gap) * 2);
+    min-width: 50px;
+    padding: 0;
+    padding-top: 2px;
     text-align: center;
     width: 26%;
   }
@@ -12007,6 +12052,10 @@ header {
                 }
 .pg-mobile-create-order .pg-order .cr-order .cr-tab-panel .cr-tab-content .cr-order-form .cr-order-item:nth-child(2) .cr-order-input__crypto-icon, .pg-mobile-create-order .pg-order .cr-order .cr-tab-panel .cr-tab-content .cr-order-form .cr-order-item:nth-child(3) .cr-order-input__crypto-icon {
               width: 30%;
+            }
+.pg-mobile-create-order .pg-order .cr-order .cr-tab-panel .cr-tab-content .cr-order-form .cr-order-item:nth-child(2) .error-message, .pg-mobile-create-order .pg-order .cr-order .cr-tab-panel .cr-tab-content .cr-order-form .cr-order-item:nth-child(3) .error-message {
+              margin-top: 60px;
+              width: calc(50% - 24px);
             }
 .pg-mobile-create-order .pg-order .cr-order .cr-tab-panel .cr-tab-content .cr-order-form .cr-order-item:nth-child(4) .cr-order-item__percentage-buttons {
               margin: 0;

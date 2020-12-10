@@ -127,7 +127,6 @@ class OrderBookContainer extends React.Component<Props, State> {
 
         const isLarge = forceLarge || this.state.width > breakpoint;
         const asksData = isLarge ? asks : asks.slice(0).reverse();
-
         return (
             <CombinedOrderBook
                 maxVolume={calcMaxVolume(bids, asks)}

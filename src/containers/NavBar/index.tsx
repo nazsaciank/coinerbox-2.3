@@ -40,7 +40,7 @@ class NavBarComponent extends React.Component<Props> {
                     <div className="pg-navbar__header-settings__switcher">
                         <div
                             className="pg-navbar__header-settings__switcher__items"
-                            onClick={e => this.handleChangeCurrentStyleMode(colorTheme === 'light' ? 'basic' : 'light')}
+                            onClick={e => this.handleChangeCurrentStyleMode(colorTheme === 'light' ? 'dark' : 'light')}
                         >
                             {this.getLightDarkMode()}
                         </div>
@@ -53,7 +53,7 @@ class NavBarComponent extends React.Component<Props> {
     private getLightDarkMode = () => {
         const { colorTheme } = this.props;
 
-        if (colorTheme === 'basic') {
+        if (colorTheme === 'dark') {
             return (
                 <React.Fragment>
                     <div className="switcher-item">
@@ -69,10 +69,10 @@ class NavBarComponent extends React.Component<Props> {
         return (
             <React.Fragment>
                 <div className="switcher-item switcher-item--active">
-                    <Sun fillColor={colors.basic.navbar.sun}/>
+                    <Sun fillColor={colors.dark.navbar.sun}/>
                 </div>
                 <div className="switcher-item">
-                    <Moon fillColor={colors.basic.navbar.moon}/>
+                    <Moon fillColor={colors.dark.navbar.moon}/>
                 </div>
             </React.Fragment>
         );
